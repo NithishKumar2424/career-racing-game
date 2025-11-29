@@ -4,31 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Nithish's Career Racing Game 🏎️</title>
+    <title>Nithish's Career Race</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
-            -webkit-touch-callout: none;
         }
 
         body {
-            font-family: 'Press Start 2P', 'Courier New', monospace;
+            font-family: Arial, sans-serif;
             background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start;
+            justify-content: center;
             min-height: 100vh;
             color: white;
-            overflow-x: hidden;
-            overflow-y: auto;
-            padding: 10px;
-            touch-action: pan-y;
+            overflow: hidden;
+            touch-action: none;
         }
 
         .game-container {
@@ -38,18 +33,16 @@
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9);
             border: 3px solid #FFD700;
             max-width: 500px;
-            width: 100%;
-            margin: 10px auto;
+            width: 95%;
         }
 
         h1 {
             text-align: center;
             color: #FFD700;
-            font-size: 0.9em;
+            font-size: 1.2em;
             margin-bottom: 8px;
             text-shadow: 0 0 15px #FFD700;
             animation: glow 2s infinite alternate;
-            line-height: 1.4;
         }
 
         @keyframes glow {
@@ -60,125 +53,77 @@
         .subtitle {
             text-align: center;
             color: #4ECDC4;
-            font-size: 0.45em;
-            margin-bottom: 12px;
+            font-size: 0.7em;
+            margin-bottom: 10px;
             line-height: 1.5;
+        }
+
+        .controls-instruction {
+            text-align: center;
+            background: rgba(78, 205, 196, 0.2);
+            border: 2px solid #4ECDC4;
+            border-radius: 10px;
+            padding: 12px;
+            margin: 10px 0;
+            font-size: 0.75em;
+            line-height: 1.6;
         }
 
         #gameCanvas {
             display: block;
-            margin: 10px auto;
-            background: linear-gradient(180deg, #1a1a2e 0%, #0f0f1e 100%);
-            border: 3px solid #FFD700;
-            border-radius: 8px;
-            box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
-            width: 100%;
-            max-width: 350px;
-            height: auto;
-        }
-
-        .controls-section {
-            text-align: center;
-            margin: 12px 0;
-        }
-
-        .keyboard-info {
-            color: #4ECDC4;
-            font-size: 0.45em;
-            line-height: 1.6;
-            margin-bottom: 10px;
-        }
-
-        /* Mobile Touch Controls */
-        .touch-controls {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            max-width: 280px;
             margin: 15px auto;
-            padding: 0;
-        }
-
-        .touch-btn {
-            padding: 18px;
-            font-size: 1.5em;
-            background: linear-gradient(135deg, #FF6B6B, #FFD700);
-            border: 2px solid #FFD700;
-            border-radius: 12px;
+            background: linear-gradient(180deg, #1a1a2e 0%, #0f0f1e 100%);
+            border: 4px solid #FFD700;
+            border-radius: 10px;
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.6);
+            width: 100%;
+            max-width: 400px;
+            height: auto;
             cursor: pointer;
-            color: white;
-            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
-            transition: all 0.1s;
-            user-select: none;
-            touch-action: none;
-            font-weight: bold;
-            min-height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .touch-btn:active {
-            transform: scale(0.92);
-            box-shadow: 0 2px 8px rgba(255, 215, 0, 0.4);
-            background: linear-gradient(135deg, #c0392b, #f39c12);
-        }
-
-        .touch-btn.empty {
-            background: transparent;
-            border: none;
-            box-shadow: none;
-            cursor: default;
-        }
-
-        .touch-btn.empty:active {
-            transform: none;
         }
 
         .game-btn {
             display: block;
-            margin: 12px auto;
-            padding: 12px 30px;
-            font-size: 0.6em;
-            background: linear-gradient(135deg, #FF6B6B, #FFD700);
+            margin: 15px auto;
+            padding: 15px 40px;
+            font-size: 1em;
+            background: linear-gradient(135deg, #4ECDC4, #2ECC71);
             color: white;
-            border: 3px solid #FFD700;
-            border-radius: 12px;
+            border: 3px solid #4ECDC4;
+            border-radius: 15px;
             cursor: pointer;
-            font-family: 'Press Start 2P', monospace;
-            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.5);
+            box-shadow: 0 6px 20px rgba(78, 205, 196, 0.5);
+            font-weight: bold;
             transition: all 0.2s;
-            width: fit-content;
         }
 
         .game-btn:active {
-            transform: translateY(2px);
-            box-shadow: 0 3px 10px rgba(255, 215, 0, 0.5);
+            transform: scale(0.95);
         }
 
         .stats {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
+            gap: 10px;
             margin-top: 15px;
         }
 
         .stat-item {
             text-align: center;
-            background: linear-gradient(135deg, rgba(78, 205, 196, 0.2), rgba(255, 107, 107, 0.2));
-            padding: 10px;
+            background: rgba(78, 205, 196, 0.2);
+            padding: 12px;
             border-radius: 10px;
             border: 2px solid #4ECDC4;
         }
 
         .stat-label {
             color: #4ECDC4;
-            margin-bottom: 4px;
-            font-size: 0.45em;
+            margin-bottom: 5px;
+            font-size: 0.7em;
         }
 
         .stat-value {
-            font-size: 0.8em;
+            font-size: 1.2em;
             font-weight: bold;
             color: #FFD700;
         }
@@ -190,14 +135,14 @@
             transform: translate(-50%, -50%) scale(0);
             background: linear-gradient(135deg, #FF6B6B, #4ECDC4);
             color: white;
-            padding: 25px;
-            border-radius: 15px;
-            font-size: 0.55em;
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.9);
+            padding: 30px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9);
             z-index: 1000;
-            max-width: 85%;
+            max-width: 90%;
             text-align: center;
-            border: 3px solid #FFD700;
+            border: 4px solid #FFD700;
             transition: transform 0.4s;
             line-height: 1.6;
         }
@@ -207,144 +152,42 @@
         }
 
         .milestone-icon {
-            font-size: 2.5em;
-            margin-bottom: 12px;
-        }
-
-        .milestone-title {
-            font-size: 0.9em;
-            margin-bottom: 8px;
-            color: #FFD700;
+            font-size: 3em;
+            margin-bottom: 15px;
         }
 
         .game-over {
             text-align: center;
             color: #FFD700;
-            font-size: 0.65em;
-            margin-top: 12px;
+            font-size: 1em;
+            margin-top: 15px;
             display: none;
-            padding: 12px;
+            padding: 15px;
             background: rgba(255, 215, 0, 0.2);
-            border-radius: 10px;
-            border: 2px solid #FFD700;
+            border-radius: 12px;
+            border: 3px solid #FFD700;
             line-height: 1.6;
         }
 
-        /* Mobile specific styles */
-        @media (max-width: 768px) {
-            body {
-                padding: 5px;
-            }
-            
-            .game-container {
-                padding: 12px;
-                margin: 5px;
-            }
-            
-            h1 {
-                font-size: 0.8em;
-            }
-            
-            .subtitle {
-                font-size: 0.4em;
-            }
-            
-            #gameCanvas {
-                max-width: 100%;
-            }
-            
-            .touch-controls {
-                display: grid;
-            }
-            
-            .keyboard-info {
-                display: none;
-            }
-            
-            .touch-btn {
-                padding: 15px;
-                font-size: 1.3em;
-                min-height: 55px;
-            }
-        }
-
-        /* Desktop styles */
-        @media (min-width: 769px) {
-            .touch-controls {
-                display: none;
-            }
-            
-            .keyboard-info {
-                display: block;
-            }
-            
-            #gameCanvas {
-                max-width: 400px;
-            }
-            
-            h1 {
-                font-size: 1.2em;
-            }
-            
-            .subtitle {
-                font-size: 0.6em;
-            }
-        }
-
-        /* Small mobile phones */
-        @media (max-width: 375px) {
-            h1 {
-                font-size: 0.7em;
-            }
-            
-            .subtitle {
-                font-size: 0.35em;
-            }
-            
-            .touch-btn {
-                padding: 12px;
-                font-size: 1.2em;
-                min-height: 50px;
-            }
-            
-            .game-btn {
-                font-size: 0.5em;
-                padding: 10px 25px;
-            }
-            
-            .stat-label {
-                font-size: 0.4em;
-            }
-            
-            .stat-value {
-                font-size: 0.7em;
-            }
+        @media (max-width: 500px) {
+            h1 { font-size: 1em; }
+            .subtitle { font-size: 0.6em; }
+            .controls-instruction { font-size: 0.65em; }
         }
     </style>
 </head>
 <body>
     <div class="game-container">
         <h1>🏎️ CAREER RACE 🏁</h1>
-        <p class="subtitle">Race Through My Journey!<br>Collect All 5 Milestones</p>
-
-        <canvas id="gameCanvas" width="350" height="500"></canvas>
+        <p class="subtitle">Collect All 5 Career Milestones!</p>
         
-        <div class="controls-section">
-            <div class="keyboard-info">
-                🎮 Use Arrow Keys<br>← → ↑ ↓
-            </div>
-
-            <!-- Touch Controls for Mobile -->
-            <div class="touch-controls">
-                <div class="touch-btn empty"></div>
-                <button class="touch-btn" id="upBtn">↑</button>
-                <div class="touch-btn empty"></div>
-                
-                <button class="touch-btn" id="leftBtn">←</button>
-                <button class="touch-btn" id="downBtn">↓</button>
-                <button class="touch-btn" id="rightBtn">→</button>
-            </div>
+        <div class="controls-instruction">
+            📱 <strong>MOBILE:</strong> Tilt phone left/right to steer<br>
+            Swipe UP on screen to speed up<br>
+            💻 <strong>PC:</strong> Arrow keys ← → ↑
         </div>
+
+        <canvas id="gameCanvas" width="400" height="600"></canvas>
         
         <button id="startBtn" class="game-btn">▶ START RACE</button>
         
@@ -368,8 +211,8 @@
         </div>
         
         <div class="game-over" id="gameOver">
-            🏆 COMPLETE! 🏆<br>
-            ALL MILESTONES!
+            🏆 RACE COMPLETE! 🏆<br><br>
+            ALL MILESTONES COLLECTED!
         </div>
     </div>
 
@@ -392,50 +235,79 @@
         
         const car = {
             x: canvas.width / 2 - 20,
-            y: canvas.height - 100,
-            width: 35,
-            height: 55,
-            speed: 6
+            y: canvas.height - 120,
+            width: 40,
+            height: 60,
+            speed: 7,
+            tiltX: 0 // For tilt control
         };
         
         const milestones = [
-            { 
-                distance: 70, 
-                title: "🎓 Electronics Eng",
-                collected: false,
-                icon: "🎓"
-            },
-            { 
-                distance: 180, 
-                title: "🤖 AI/ML @ Samsung",
-                collected: false,
-                icon: "🤖"
-            },
-            { 
-                distance: 290, 
-                title: "💻 Full-Stack @ NTT",
-                collected: false,
-                icon: "💻"
-            },
-            { 
-                distance: 400, 
-                title: "☁️ Cloud Architect",
-                collected: false,
-                icon: "☁️"
-            },
-            { 
-                distance: 510, 
-                title: "🏆 Software Engineer",
-                collected: false,
-                icon: "🏆"
-            }
+            { distance: 80, title: "🎓 Electronics Engineering", collected: false, icon: "🎓" },
+            { distance: 200, title: "🤖 AI/ML @ Samsung", collected: false, icon: "🤖" },
+            { distance: 320, title: "💻 Full-Stack @ NTT", collected: false, icon: "💻" },
+            { distance: 440, title: "☁️ Cloud Architect", collected: false, icon: "☁️" },
+            { distance: 560, title: "🏆 Software Engineer", collected: false, icon: "🏆" }
         ];
         
         let obstacles = [];
         const keys = {};
-        const controls = {};
         
-        // Keyboard controls
+        // TILT CONTROLS (Gyroscope)
+        let tiltEnabled = false;
+        if (window.DeviceOrientationEvent) {
+            window.addEventListener('deviceorientation', (e) => {
+                if (gameRunning && tiltEnabled) {
+                    // gamma: left/right tilt (-90 to 90)
+                    const tilt = e.gamma || 0;
+                    car.tiltX = Math.max(-30, Math.min(30, tilt)) / 3; // Normalize
+                }
+            });
+            tiltEnabled = true;
+        }
+        
+        // SWIPE CONTROLS
+        let touchStartY = 0;
+        let touchStartX = 0;
+        
+        canvas.addEventListener('touchstart', (e) => {
+            touchStartY = e.touches[0].clientY;
+            touchStartX = e.touches[0].clientX;
+        }, { passive: false });
+        
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            if (!gameRunning) return;
+            
+            const touchY = e.touches[0].clientY;
+            const touchX = e.touches[0].clientX;
+            const deltaY = touchStartY - touchY;
+            const deltaX = touchX - touchStartX;
+            
+            // Swipe UP to speed up
+            if (deltaY > 5) {
+                gameSpeed = Math.min(10, gameSpeed + 0.1);
+            }
+            
+            // Swipe DOWN to slow down
+            if (deltaY < -5) {
+                gameSpeed = Math.max(3, gameSpeed - 0.1);
+            }
+            
+            // Swipe LEFT/RIGHT to steer (if tilt not working)
+            if (!tiltEnabled) {
+                if (deltaX > 10) {
+                    car.x += 5;
+                } else if (deltaX < -10) {
+                    car.x -= 5;
+                }
+            }
+            
+            touchStartY = touchY;
+            touchStartX = touchX;
+        }, { passive: false });
+        
+        // KEYBOARD CONTROLS (PC)
         window.addEventListener('keydown', (e) => {
             if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
                 e.preventDefault();
@@ -444,46 +316,25 @@
         });
         
         window.addEventListener('keyup', (e) => {
-            if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
-                e.preventDefault();
-                keys[e.key] = false;
-            }
+            keys[e.key] = false;
         });
-        
-        // Touch controls
-        function setupTouchBtn(id, control) {
-            const btn = document.getElementById(id);
-            if (!btn) return;
-            
-            const activate = (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                controls[control] = true;
-            };
-            
-            const deactivate = (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                controls[control] = false;
-            };
-            
-            btn.addEventListener('touchstart', activate, { passive: false });
-            btn.addEventListener('touchend', deactivate, { passive: false });
-            btn.addEventListener('touchcancel', deactivate, { passive: false });
-            btn.addEventListener('mousedown', activate);
-            btn.addEventListener('mouseup', deactivate);
-            btn.addEventListener('mouseleave', deactivate);
-        }
-        
-        setupTouchBtn('leftBtn', 'left');
-        setupTouchBtn('rightBtn', 'right');
-        setupTouchBtn('upBtn', 'up');
-        setupTouchBtn('downBtn', 'down');
         
         startBtn.addEventListener('click', () => {
             if (!gameRunning) {
                 gameRunning = true;
                 startBtn.textContent = '⏸ PAUSE';
+                
+                // Request orientation permission on iOS
+                if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+                    DeviceOrientationEvent.requestPermission()
+                        .then(response => {
+                            if (response === 'granted') {
+                                tiltEnabled = true;
+                            }
+                        })
+                        .catch(console.error);
+                }
+                
                 if (distance === 0) resetGame();
                 gameLoop();
             } else {
@@ -498,7 +349,8 @@
             milestonesCollected = 0;
             gameSpeed = 4;
             car.x = canvas.width / 2 - 20;
-            car.y = canvas.height - 100;
+            car.y = canvas.height - 120;
+            car.tiltX = 0;
             milestones.forEach(m => m.collected = false);
             obstacles = [];
             document.getElementById('gameOver').style.display = 'none';
@@ -507,92 +359,97 @@
         
         function drawRoad() {
             ctx.fillStyle = '#1a4d1a';
-            ctx.fillRect(0, 0, 50, canvas.height);
-            ctx.fillRect(canvas.width - 50, 0, 50, canvas.height);
+            ctx.fillRect(0, 0, 60, canvas.height);
+            ctx.fillRect(canvas.width - 60, 0, 60, canvas.height);
             
             const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
             gradient.addColorStop(0, '#3d3d3d');
             gradient.addColorStop(1, '#1a1a1a');
             ctx.fillStyle = gradient;
-            ctx.fillRect(50, 0, canvas.width - 100, canvas.height);
+            ctx.fillRect(60, 0, canvas.width - 120, canvas.height);
             
             ctx.strokeStyle = '#ffffff';
-            ctx.lineWidth = 3;
-            ctx.beginPath();
-            ctx.moveTo(50, 0);
-            ctx.lineTo(50, canvas.height);
-            ctx.stroke();
-            ctx.beginPath();
-            ctx.moveTo(canvas.width - 50, 0);
-            ctx.lineTo(canvas.width - 50, canvas.height);
-            ctx.stroke();
+            ctx.lineWidth = 4;
+            [60, canvas.width - 60].forEach(x => {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, canvas.height);
+                ctx.stroke();
+            });
             
             ctx.strokeStyle = '#FFD700';
-            ctx.lineWidth = 3;
-            
-            for (let i = 0; i < 12; i++) {
-                const y = (i * 55 + roadOffset) % canvas.height;
+            ctx.lineWidth = 4;
+            for (let i = 0; i < 15; i++) {
+                const y = (i * 60 + roadOffset) % canvas.height;
                 ctx.beginPath();
                 ctx.moveTo(canvas.width / 2, y);
-                ctx.lineTo(canvas.width / 2, y + 25);
+                ctx.lineTo(canvas.width / 2, y + 30);
                 ctx.stroke();
             }
         }
         
         function drawCar() {
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
-            ctx.fillRect(car.x + 2, car.y + 2, car.width, car.height);
+            ctx.save();
+            ctx.translate(car.x + car.width / 2, car.y + car.height / 2);
+            ctx.rotate(car.tiltX * Math.PI / 180 * 0.3); // Slight rotation for tilt
+            ctx.translate(-car.width / 2, -car.height / 2);
             
-            const carGradient = ctx.createLinearGradient(car.x, car.y, car.x, car.y + car.height);
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+            ctx.fillRect(3, 3, car.width, car.height);
+            
+            const carGradient = ctx.createLinearGradient(0, 0, 0, car.height);
             carGradient.addColorStop(0, '#FF6B6B');
             carGradient.addColorStop(1, '#c0392b');
             ctx.fillStyle = carGradient;
-            ctx.fillRect(car.x, car.y, car.width, car.height);
+            ctx.fillRect(0, 0, car.width, car.height);
             
             ctx.fillStyle = '#4ECDC4';
-            ctx.fillRect(car.x + 5, car.y + 7, car.width - 10, 16);
+            ctx.fillRect(6, 8, car.width - 12, 18);
             
             ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
-            ctx.fillRect(car.x + 5, car.y + 7, car.width - 10, 5);
+            ctx.fillRect(6, 8, car.width - 12, 6);
             
             ctx.fillStyle = '#000';
-            ctx.fillRect(car.x - 3, car.y + 7, 5, 10);
-            ctx.fillRect(car.x + car.width - 2, car.y + 7, 5, 10);
-            ctx.fillRect(car.x - 3, car.y + 38, 5, 10);
-            ctx.fillRect(car.x + car.width - 2, car.y + 38, 5, 10);
+            ctx.fillRect(-4, 8, 6, 12);
+            ctx.fillRect(car.width - 2, 8, 6, 12);
+            ctx.fillRect(-4, 40, 6, 12);
+            ctx.fillRect(car.width - 2, 40, 6, 12);
             
             ctx.fillStyle = '#FFD700';
-            ctx.fillRect(car.x + 12, car.y, 11, car.height);
+            ctx.fillRect(14, 0, 12, car.height);
+            
+            ctx.restore();
         }
         
         function createObstacle() {
-            if (Math.random() < 0.012) {
-                const lanes = [70, 140, 210];
+            if (Math.random() < 0.015) {
+                const lanes = [80, 160, 240];
                 const lane = lanes[Math.floor(Math.random() * lanes.length)];
                 obstacles.push({
                     x: lane,
-                    y: -60,
-                    width: 35,
-                    height: 55,
-                    color: ['#4ECDC4', '#FFE66D', '#95E1D3'][Math.floor(Math.random() * 3)]
+                    y: -70,
+                    width: 40,
+                    height: 60,
+                    color: ['#4ECDC4', '#FFE66D', '#95E1D3', '#9b59b6'][Math.floor(Math.random() * 4)]
                 });
             }
         }
         
         function drawObstacles() {
             obstacles.forEach((obs, index) => {
-                ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
-                ctx.fillRect(obs.x + 2, obs.y + 2, obs.width, obs.height);
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+                ctx.fillRect(obs.x + 3, obs.y + 3, obs.width, obs.height);
                 
                 ctx.fillStyle = obs.color;
                 ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
                 
                 ctx.fillStyle = '#ffffff';
-                ctx.fillRect(obs.x + 5, obs.y + obs.height - 20, obs.width - 10, 15);
+                ctx.fillRect(obs.x + 6, obs.y + obs.height - 22, obs.width - 12, 16);
                 
                 ctx.fillStyle = '#000';
-                ctx.fillRect(obs.x - 3, obs.y + 7, 5, 8);
-                ctx.fillRect(obs.x + obs.width - 2, obs.y + 7, 5, 8);
+                [[-4, 8], [obs.width - 2, 8], [-4, obs.height - 18], [obs.width - 2, obs.height - 18]].forEach(([x, y]) => {
+                    ctx.fillRect(obs.x + x, obs.y + y, 6, 10);
+                });
                 
                 obs.y += gameSpeed + 3;
                 
@@ -606,17 +463,17 @@
         function drawMilestoneMarkers() {
             milestones.forEach(milestone => {
                 if (!milestone.collected) {
-                    const markerY = canvas.height - ((milestone.distance - distance) * 2.8);
+                    const markerY = canvas.height - ((milestone.distance - distance) * 3);
                     
-                    if (markerY > -40 && markerY < canvas.height + 40) {
+                    if (markerY > -50 && markerY < canvas.height + 50) {
                         ctx.shadowColor = '#FFD700';
-                        ctx.shadowBlur = 25;
-                        ctx.font = 'bold 35px Arial';
+                        ctx.shadowBlur = 30;
+                        ctx.font = 'bold 40px Arial';
                         ctx.fillStyle = '#FFD700';
-                        ctx.fillText(milestone.icon, canvas.width / 2 - 17, markerY);
+                        ctx.fillText(milestone.icon, canvas.width / 2 - 20, markerY);
                         ctx.shadowBlur = 0;
                         
-                        if (Math.abs(markerY - car.y) < 45) {
+                        if (Math.abs(markerY - car.y) < 50) {
                             collectMilestone(milestone);
                         }
                     }
@@ -649,22 +506,21 @@
             document.getElementById('popupTitle').textContent = milestone.title;
             
             popup.classList.add('show');
-            
-            setTimeout(() => {
-                popup.classList.remove('show');
-            }, 2800);
+            setTimeout(() => popup.classList.remove('show'), 3000);
         }
         
         function updateGame() {
-            const isLeft = keys['ArrowLeft'] || controls.left;
-            const isRight = keys['ArrowRight'] || controls.right;
-            const isUp = keys['ArrowUp'] || controls.up;
-            const isDown = keys['ArrowDown'] || controls.down;
+            // Keyboard controls (PC)
+            if (keys['ArrowLeft'] && car.x > 70) car.x -= car.speed;
+            if (keys['ArrowRight'] && car.x < canvas.width - 110) car.x += car.speed;
+            if (keys['ArrowUp']) gameSpeed = Math.min(10, gameSpeed + 0.05);
+            if (keys['ArrowDown']) gameSpeed = Math.max(3, gameSpeed - 0.05);
             
-            if (isLeft && car.x > 60) car.x -= car.speed;
-            if (isRight && car.x < canvas.width - 95) car.x += car.speed;
-            if (isUp) gameSpeed = Math.min(10, gameSpeed + 0.05);
-            if (isDown) gameSpeed = Math.max(3, gameSpeed - 0.05);
+            // Tilt controls (Mobile)
+            if (tiltEnabled && Math.abs(car.tiltX) > 1) {
+                car.x += car.tiltX * 0.8;
+                car.x = Math.max(70, Math.min(canvas.width - 110, car.x));
+            }
             
             roadOffset += gameSpeed;
             if (roadOffset > canvas.height) roadOffset = 0;
