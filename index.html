@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nithish's Career Racing Game 🏎️</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Press Start 2P', 'Courier New', monospace;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .game-container {
+            background: rgba(0, 0, 0, 0.9);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+            max-width: 900px;
+            width: 95%;
+            border: 3px solid #FFD700;
+        }
+
+        h1 {
+            text-align: center;
+            color: #FFD700;
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px #FFD700;
+            animation: glow 2s infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 5px #FFD700, 0 0 10px #FFD700; }
+            to { text-shadow: 0 0 10px #FFD700, 0 0 20px #FFD700, 0 0 30px #FFD700; }
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #4ECDC4;
+            font-size: 0.7em;
+            margin-bottom: 20px;
+        }
+
+        #gameCanvas {
+            display: block;
+            margin: 20px auto;
+            background: #1a1a2e;
+            border: 4px solid #FFD700;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+            image-rendering: pixelated;
+        }
+
+        .controls {
+            text-align: center;
+            margin: 15px 0;
+            color: #4ECDC4;
+            font-size: 0.7em;
+            line-height: 1.8;
+        }
+
+        .key {
+            background: rgba(255, 215, 0, 0.2);
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: 1px solid #FFD700;
+            margin: 0 3px;
+            display: inline-block;
+        }
+
+        #startBtn {
+            display: block;
+            margin: 20px auto;
+            padding: 15px 40px;
+            font-size: 1em;
+            font-weight: bold;
+            background: linear-gradient(135deg, #FF6B6B 0%, #FFD700 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'Press Start 2P', monospace;
+            box-shadow: 0 5px 20px rgba(255, 215, 0, 0.5);
+            transition: all 0.3s;
+        }
+
+        #startBtn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 30px rgba(255, 215, 0, 0.8);
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+            font-size: 0.7em;
+        }
+
+        .stat-item {
+            text-align: center;
+            background: rgba(78, 205, 196, 0.1);
+            padding: 10px 15px;
+            border-radius: 10px;
+            border: 2px solid #4ECDC4;
+            min-width: 120px;
+        }
+
+        .stat-label {
+            color: #4ECDC4;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #FFD700;
+        }
+
+        .milestone-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: linear-gradient(135deg, #FF6B6B 0%, #4ECDC4 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            max-width: 400px;
+            text-align: center;
+            border: 3px solid #FFD700;
+            transition: transform 0.3s;
+        }
+
+        .milestone-popup.show {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .milestone-title {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            color: #FFD700;
+        }
+
+        .milestone-desc {
+            font-size: 0.8em;
+            line-height: 1.6;
+        }
+
+        .game-over {
+            text-align: center;
+            color: #FFD700;
+            font-size: 1em;
+            margin-top: 10px;
+            display: none;
+        }
+
+        @media (max-width: 850px) {
+            h1 { font-size: 1.2em; }
+            .subtitle { font-size: 0.6em; }
+            .controls { font-size: 0.6em; }
+            #startBtn { font-size: 0.8em; padding: 12px 30px; }
+            .stats { font-size: 0.6em; }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>🏎️ NITHISH'S CAREER RACE 🏁</h1>
+        <p class="subtitle">Classic Arcade Racing - Collect Career Milestones!</p>
+        
+        <canvas id="gameCanvas" width="600" height="700"></canvas>
+        
+        <div class="controls">
+            🎮 CONTROLS:<br>
+            <span class="key">◄ LEFT</span>
+            <span class="key">► RIGHT</span>
+            <span class="key">▲ UP</span>
+            <span class="key">▼ DOWN</span>
+        </div>
+        
+        <button id="startBtn">▶ START RACE</button>
+        
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-label">DISTANCE</div>
+                <div class="stat-value" id="distance">0 km</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">SPEED</div>
+                <div class="stat-value" id="speed">0</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">MILESTONES</div>
+                <div class="stat-value" id="milestones">0/5</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">SCORE</div>
+                <div class="stat-value" id="score">0</div>
+            </div>
+        </div>
+        
+        <div class="game-over" id="gameOver">
+            🏆 RACE COMPLETE! 🏆<br>
+            ALL MILESTONES COLLECTED!
+        </div>
+    </div>
+
+    <div class="milestone-popup" id="milestonePopup">
+        <div class="milestone-title" id="popupTitle"></div>
+        <div class="milestone-desc" id="popupDesc"></div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const startBtn = document.getElementById('startBtn');
+        
+        let gameRunning = false;
+        let gameSpeed = 3;
+        let roadOffset = 0;
+        let distance = 0;
+        let score = 0;
+        let milestonesCollected = 0;
+        
+        // Player car
+        const car = {
+            x: canvas.width / 2 - 15,
+            y: canvas.height - 150,
+            width: 30,
+            height: 50,
+            speed: 5
+        };
+        
+        // Career milestones with positions
+        const milestones = [
+            { 
+                distance: 100, 
+                title: "🎓 Electronics Engineering",
+                desc: "IoT & Embedded Systems | Arduino Projects | 2018-2022",
+                collected: false,
+                icon: "🎓"
+            },
+            { 
+                distance: 250, 
+                title: "🤖 AI/ML Engineer",
+                desc: "Samsung SEED Lab | 10,000+ Images Trained | +18% ML Accuracy",
+                collected: false,
+                icon: "🤖"
+            },
+            { 
+                distance: 400, 
+                title: "💻 Full-Stack Developer",
+                desc: "NTT Data | React + .NET | +15% Performance Boost",
+                collected: false,
+                icon: "💻"
+            },
+            { 
+                distance: 550, 
+                title: "☁️ Cloud Architect",
+                desc: "AWS + DevOps | Terraform, Docker, Kubernetes | 2024+",
+                collected: false,
+                icon: "☁️"
+            },
+            { 
+                distance: 700, 
+                title: "🏆 Software Engineer",
+                desc: "Building at Scale | MS @ Northeastern | Future Goals!",
+                collected: false,
+                icon: "🏆"
+            }
+        ];
+        
+        // Obstacles (other cars)
+        let obstacles = [];
+        
+        const keys = {};
+        
+        document.addEventListener('keydown', (e) => {
+            keys[e.key] = true;
+            e.preventDefault();
+        });
+        
+        document.addEventListener('keyup', (e) => {
+            keys[e.key] = false;
+        });
+        
+        startBtn.addEventListener('click', () => {
+            if (!gameRunning) {
+                gameRunning = true;
+                startBtn.textContent = '⏸ PAUSE';
+                if (distance === 0) resetGame();
+                gameLoop();
+            } else {
+                gameRunning = false;
+                startBtn.textContent = '▶ RESUME';
+            }
+        });
+        
+        function resetGame() {
+            distance = 0;
+            score = 0;
+            milestonesCollected = 0;
+            gameSpeed = 3;
+            milestones.forEach(m => m.collected = false);
+            obstacles = [];
+            document.getElementById('gameOver').style.display = 'none';
+        }
+        
+        function drawRoad() {
+            // Grass on sides
+            ctx.fillStyle = '#2d5016';
+            ctx.fillRect(0, 0, 100, canvas.height);
+            ctx.fillRect(500, 0, 100, canvas.height);
+            
+            // Road
+            ctx.fillStyle = '#2d2d2d';
+            ctx.fillRect(100, 0, 400, canvas.height);
+            
+            // Road edges
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 4;
+            ctx.beginPath();
+            ctx.moveTo(100, 0);
+            ctx.lineTo(100, canvas.height);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(500, 0);
+            ctx.lineTo(500, canvas.height);
+            ctx.stroke();
+            
+            // Center line (dashed)
+            ctx.strokeStyle = '#FFD700';
+            ctx.lineWidth = 3;
+            ctx.setLineDash([20, 20]);
+            
+            for (let i = -1; i < 20; i++) {
+                const y = (i * 80 + roadOffset) % canvas.height;
+                ctx.beginPath();
+                ctx.moveTo(300, y);
+                ctx.lineTo(300, y + 40);
+                ctx.stroke();
+            }
+            ctx.setLineDash([]);
+        }
+        
+        function drawCar() {
+            // Car shadow
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+            ctx.fillRect(car.x + 2, car.y + 2, car.width, car.height);
+            
+            // Car body
+            ctx.fillStyle = '#FF6B6B';
+            ctx.fillRect(car.x, car.y, car.width, car.height);
+            
+            // Car window
+            ctx.fillStyle = '#4ECDC4';
+            ctx.fillRect(car.x + 5, car.y + 5, car.width - 10, 15);
+            
+            // Wheels
+            ctx.fillStyle = '#000';
+            ctx.fillRect(car.x - 3, car.y + 5, 5, 10);
+            ctx.fillRect(car.x + car.width - 2, car.y + 5, 5, 10);
+            ctx.fillRect(car.x - 3, car.y + 35, 5, 10);
+            ctx.fillRect(car.x + car.width - 2, car.y + 35, 5, 10);
+            
+            // Racing stripe
+            ctx.fillStyle = '#FFD700';
+            ctx.fillRect(car.x + 10, car.y, 10, car.height);
+        }
+        
+        function createObstacle() {
+            if (Math.random() < 0.02) {
+                const lane = Math.floor(Math.random() * 3);
+                obstacles.push({
+                    x: 120 + lane * 120,
+                    y: -60,
+                    width: 30,
+                    height: 50,
+                    color: ['#4ECDC4', '#FFE66D', '#95E1D3'][lane]
+                });
+            }
+        }
+        
+        function drawObstacles() {
+            obstacles.forEach((obs, index) => {
+                // Shadow
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+                ctx.fillRect(obs.x + 2, obs.y + 2, obs.width, obs.height);
+                
+                // Car body
+                ctx.fillStyle = obs.color;
+                ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
+                
+                // Window
+                ctx.fillStyle = '#fff';
+                ctx.fillRect(obs.x + 5, obs.y + obs.height - 20, obs.width - 10, 15);
+                
+                // Wheels
+                ctx.fillStyle = '#000';
+                ctx.fillRect(obs.x - 3, obs.y + 5, 5, 8);
+                ctx.fillRect(obs.x + obs.width - 2, obs.y + 5, 5, 8);
+                ctx.fillRect(obs.x - 3, obs.y + obs.height - 13, 5, 8);
+                ctx.fillRect(obs.x + obs.width - 2, obs.y + obs.height - 13, 5, 8);
+                
+                obs.y += gameSpeed + 2;
+                
+                // Remove if off screen
+                if (obs.y > canvas.height) {
+                    obstacles.splice(index, 1);
+                    score += 10;
+                }
+            });
+        }
+        
+        function checkCollision() {
+            obstacles.forEach(obs => {
+                if (car.x < obs.x + obs.width &&
+                    car.x + car.width > obs.x &&
+                    car.y < obs.y + obs.height &&
+                    car.y + car.height > obs.y) {
+                    // Collision! Slow down
+                    gameSpeed = Math.max(2, gameSpeed - 0.5);
+                    score = Math.max(0, score - 50);
+                }
+            });
+        }
+        
+        function drawMilestoneMarkers() {
+            milestones.forEach(milestone => {
+                if (!milestone.collected) {
+                    const markerY = canvas.height - ((milestone.distance - distance) * 2);
+                    
+                    if (markerY > 0 && markerY < canvas.height) {
+                        // Milestone marker on road
+                        ctx.fillStyle = '#FFD700';
+                        ctx.font = 'bold 30px Arial';
+                        ctx.fillText(milestone.icon, 280, markerY);
+                        
+                        // Glow effect
+                        ctx.shadowColor = '#FFD700';
+                        ctx.shadowBlur = 20;
+                        ctx.fillText(milestone.icon, 280, markerY);
+                        ctx.shadowBlur = 0;
+                        
+                        // Check if collected
+                        if (Math.abs(markerY - car.y) < 40) {
+                            collectMilestone(milestone);
+                        }
+                    }
+                }
+            });
+        }
+        
+        function collectMilestone(milestone) {
+            if (!milestone.collected) {
+                milestone.collected = true;
+                milestonesCollected++;
+                score += 100;
+                gameSpeed += 0.5;
+                
+                showMilestonePopup(milestone);
+                
+                if (milestonesCollected === 5) {
+                    setTimeout(() => {
+                        document.getElementById('gameOver').style.display = 'block';
+                        gameRunning = false;
+                        startBtn.textContent = '🔄 RESTART';
+                    }, 2000);
+                }
+            }
+        }
+        
+        function showMilestonePopup(milestone) {
+            const popup = document.getElementById('milestonePopup');
+            document.getElementById('popupTitle').textContent = milestone.title;
+            document.getElementById('popupDesc').textContent = milestone.desc;
+            
+            popup.classList.add('show');
+            
+            setTimeout(() => {
+                popup.classList.remove('show');
+            }, 3000);
+        }
+        
+        function updateGame() {
+            // Handle car controls
+            if (keys['ArrowLeft'] && car.x > 110) {
+                car.x -= car.speed;
+            }
+            if (keys['ArrowRight'] && car.x < 460) {
+                car.x += car.speed;
+            }
+            if (keys['ArrowUp'] && car.y > 50) {
+                car.y -= car.speed;
+                gameSpeed += 0.05;
+            }
+            if (keys['ArrowDown'] && car.y < canvas.height - 100) {
+                car.y += car.speed;
+                gameSpeed = Math.max(2, gameSpeed - 0.05);
+            }
+            
+            // Update road animation
+            roadOffset += gameSpeed;
+            if (roadOffset > canvas.height) {
+                roadOffset = 0;
+            }
+            
+            // Update distance and stats
+            distance += gameSpeed / 20;
+            document.getElementById('distance').textContent = Math.floor(distance) + ' km';
+            document.getElementById('speed').textContent = Math.floor(gameSpeed * 20);
+            document.getElementById('milestones').textContent = milestonesCollected + '/5';
+            document.getElementById('score').textContent = score;
+            
+            createObstacle();
+            checkCollision();
+        }
+        
+        function gameLoop() {
+            if (!gameRunning) return;
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            drawRoad();
+            drawMilestoneMarkers();
+            drawObstacles();
+            drawCar();
+            updateGame();
+            
+            requestAnimationFrame(gameLoop);
+        }
+    </script>
+</body>
+</html>
